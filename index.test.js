@@ -9,11 +9,11 @@ describe('Unit | binarySearch', function() {
     const search = binarySearch(1, 4);
     for (let [ value ] of search) {
       const expectedValue = expectedValues.length ? expectedValues.shift() : null;
-      assert.equal(value, expectedValue, 'values in order');
+      assert.strictEqual(value, expectedValue, 'values in order');
       search.isLeft ? search.right() : search.left();
     }
-    assert.equal(expectedValues.length, 0, 'no remaining values');
-    assert.equal(search.index, lastIndex, 'expected last index');
+    assert.strictEqual(expectedValues.length, 0, 'no remaining values');
+    assert.strictEqual(search.index, lastIndex, 'expected last index');
   });
 
   it('starts left', function() {
@@ -22,11 +22,11 @@ describe('Unit | binarySearch', function() {
     const search = binarySearch(1, 3).startLeft();
     for (let [ value ] of search) {
       const expectedValue = expectedValues.length ? expectedValues.shift() : null;
-      assert.equal(value, expectedValue, 'values in order');
+      assert.strictEqual(value, expectedValue, 'values in order');
       search.isLeft ? search.right() : search.left();
     }
-    assert.equal(expectedValues.length, 0, 'no remaining values');
-    assert.equal(search.index, lastIndex, 'expected last index');
+    assert.strictEqual(expectedValues.length, 0, 'no remaining values');
+    assert.strictEqual(search.index, lastIndex, 'expected last index');
   });
 
   it('starts right', function() {
@@ -35,11 +35,11 @@ describe('Unit | binarySearch', function() {
     const search = binarySearch(1, 3).startRight();
     for (let [ value ] of search) {
       const expectedValue = expectedValues.shift();
-      assert.equal(value, expectedValue, 'values in order');
+      assert.strictEqual(value, expectedValue, 'values in order');
       search.isLeft ? search.right() : search.left();
     }
-    assert.equal(expectedValues.length, 0, 'no remaining values');
-    assert.equal(search.index, lastIndex, 'expected last index');
+    assert.strictEqual(expectedValues.length, 0, 'no remaining values');
+    assert.strictEqual(search.index, lastIndex, 'expected last index');
   });
 
   it('works going left', function() {
@@ -48,11 +48,11 @@ describe('Unit | binarySearch', function() {
     const search = binarySearch(0, 100).startLow();
     for (let [ value ] of search) {
       const expectedValue = expectedValues.length ? expectedValues.shift() : null;
-      assert.equal(value, expectedValue, 'values in order');
+      assert.strictEqual(value, expectedValue, 'values in order');
       search.isLeft ? search.right() : search.left();
     }
-    assert.equal(expectedValues.length, 0, 'no remaining values');
-    assert.equal(search.index, lastIndex, 'expected last index');
+    assert.strictEqual(expectedValues.length, 0, 'no remaining values');
+    assert.strictEqual(search.index, lastIndex, 'expected last index');
   });
 
   it('works going right', function() {
@@ -61,11 +61,11 @@ describe('Unit | binarySearch', function() {
     const search = binarySearch(0, 100).startLow();
     for (let [ value ] of search) {
       const expectedValue = expectedValues.length ? expectedValues.shift() : null;
-      assert.equal(value, expectedValue, 'values in order');
+      assert.strictEqual(value, expectedValue, 'values in order');
       search.isRight ? search.left() : search.right();
     }
-    assert.equal(expectedValues.length, 0, 'no remaining values');
-    assert.equal(search.index, lastIndex, 'expected last index');
+    assert.strictEqual(expectedValues.length, 0, 'no remaining values');
+    assert.strictEqual(search.index, lastIndex, 'expected last index');
   });
 
   it('works with floats', function() {
@@ -74,14 +74,14 @@ describe('Unit | binarySearch', function() {
     const search = binarySearch(0, 1).float().startLeft();
     for (let [ value ] of search) {
       const expectedValue = expectedValues.length ? expectedValues.shift() : null;
-      assert.equal(value, expectedValue, 'values in order');
+      assert.strictEqual(value, expectedValue, 'values in order');
       // Limit infinite loop to only our test data
       if (!expectedValues.length) {
         break;
       }
       search.isLow ? search.right() : search.left();
     }
-    assert.equal(search.index, lastIndex, 'expected last index');
+    assert.strictEqual(search.index, lastIndex, 'expected last index');
   });
 
   it('works with comparator', function() {
@@ -90,11 +90,11 @@ describe('Unit | binarySearch', function() {
     const result = binarySearch(0, 100).startLow()
       .search((value, i, search) => {
         expectedValue = expectedValues.length ? expectedValues.shift() : null;
-        assert.equal(value, expectedValue, 'values in order');
+        assert.strictEqual(value, expectedValue, 'values in order');
         search.isLeft ? search.right() : search.left();
       });
-    assert.equal(expectedValues.length, 0, 'no remaining values');
-    assert.equal(result, expectedValue, 'result is last value');
+    assert.strictEqual(expectedValues.length, 0, 'no remaining values');
+    assert.strictEqual(result, expectedValue, 'result is last value');
   });
 
   it('works with comparator returning best', function() {
@@ -108,10 +108,10 @@ describe('Unit | binarySearch', function() {
           search.promote();
           hasSeenBest = expectedValue === expectedBestValue;
         }
-        assert.equal(value, expectedValue, 'values in order');
+        assert.strictEqual(value, expectedValue, 'values in order');
         search.isLeft ? search.right() : search.left();
       }, true);
-    assert.equal(expectedValues.length, 0, 'no remaining values');
-    assert.equal(result, expectedBestValue, 'result is best value');
+    assert.strictEqual(expectedValues.length, 0, 'no remaining values');
+    assert.strictEqual(result, expectedBestValue, 'result is best value');
   });
 });
