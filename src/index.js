@@ -129,19 +129,26 @@ export function binarySearch(left, right, config = {}) {
 
       while (it.lowBound <= it.highBound) {
 
+        const { _nextValue } = it;
+        const hasNextValue = _nextValue !== null && _nextValue !== undefined;
+
         if (!++i && _startPos) {
           // Starting left/right, try left or right on first iteration if desired
           floatValue = _startPos < 0 ? left : right;
-        } else if (i === 1 && _startPos) {
+        } else if (hasNextValue) {
+          // Try next value if given
+          floatValue = _nextValue;
+          it._nextValue = undefined;
+        } else if (_startPos) {
           // Starting left/right, try other side of desired on second iteration
           floatValue = _startPos < 0 ? right : left;
+          _startPos = 0;
         } else if (i === 1 && !_startPos) {
           // Starting next, try bound on side of desired direction on second iteration
           floatValue = _direction < 0 ? left : right;
         } else {
           // Get next value between current bounds
-          floatValue = it._nextValue ?? it._getNextValue(left, right, i, it);
-          it._nextValue = undefined;
+          floatValue = it._getNextValue(left, right, i, it);
         }
 
         // Round to integer if needed
@@ -149,7 +156,7 @@ export function binarySearch(left, right, config = {}) {
 
         // Break if same value as previous or if at bounds
         if (previousValue !== undefined && feq(value, previousValue)
-          || i > 1 && (value <= left || value >= right)
+          || !hasNextValue && i > 1 && (value <= left || value >= right)
         ) {
           break;
         }
@@ -166,14 +173,14 @@ export function binarySearch(left, right, config = {}) {
         // Break if done called or direction out of bounds
         // Note: Ignore warning "Can be simplified to true", as above
         // `yield` allows method calls that change `_direction`
-         if (!_direction || _direction < 0 ? it.isLeft : it.isRight) {
+        if (_direction === 0 || _direction && (_direction < 0 ? it.isLeft : it.isRight)) {
           break;
         }
 
         // Shrink bounds
         if (_direction < 0) {
           right = floatValue;
-        } else {
+        } else if (_direction > 0) {
           left = floatValue;
         }
 
