@@ -257,19 +257,20 @@ function binarySearch(left, right, config = {}) {
           _nextValue
         } = it;
         const hasNextValue = _nextValue !== null && _nextValue !== undefined;
+        const hasEdgeValue = _startPos;
 
-        if (!++i && _startPos) {
+        if (!++i && hasEdgeValue) {
           // Starting left/right, try left or right on first iteration if desired
           floatValue = _startPos < 0 ? left : right;
         } else if (hasNextValue) {
           // Try next value if given
           floatValue = _nextValue;
           it._nextValue = undefined;
-        } else if (_startPos) {
+        } else if (hasEdgeValue) {
           // Starting left/right, try other side of desired on second iteration
           floatValue = _startPos < 0 ? right : left;
           _startPos = 0;
-        } else if (i === 1 && !_startPos) {
+        } else if (i === 1 && !hasEdgeValue) {
           // Starting next, try bound on side of desired direction on second iteration
           floatValue = _direction < 0 ? left : right;
         } else {
@@ -280,7 +281,7 @@ function binarySearch(left, right, config = {}) {
 
         value = it._float ? floatValue : Math.round(floatValue); // Break if same value as previous or if at bounds
 
-        if (previousValue !== undefined && feq(value, previousValue) || !hasNextValue && i > 1 && (value <= left || value >= right)) {
+        if (previousValue !== undefined && feq(value, previousValue) || value < left || value > right || !(hasNextValue || hasEdgeValue) && i > 1 && (value === left || value === right)) {
           break;
         }
 

@@ -130,4 +130,23 @@ describe('Unit | binarySearch', function() {
     assert.strictEqual(expectedValues.length, 0, 'no remaining values');
     assert.strictEqual(search.index, lastIndex, 'expected last index');
   });
+
+  it('works with next after first value and then edge value', function() {
+    const expectedValues = [ 1, 2, 3, 4 ];
+    const lastIndex = expectedValues.length - 1;
+    const search = binarySearch(1, 4).startLeft();
+    for (let [ value ] of search) {
+      const expectedValue = expectedValues.length ? expectedValues.shift() : null;
+      assert.strictEqual(value, expectedValue, 'values in order');
+      if (value === 4) {
+        break;
+      } else if (value === 3) {
+        search.right();
+      } else {
+        search.nextValue(value + 1);
+      }
+    }
+    assert.strictEqual(expectedValues.length, 0, 'no remaining values');
+    assert.strictEqual(search.index, lastIndex, 'expected last index');
+  });
 });

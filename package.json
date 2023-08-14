@@ -1,6 +1,6 @@
 {
   "name": "@kmccullough/binary-search",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Performs a binary search by iterable or callback",
   "repository": {
     "type": "git",
